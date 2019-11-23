@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sql_1/AdminPage.dart';
-import 'package:sql_1/MemberPage.dart';
+import 'package:sql_1/TeacherPage.dart';
 
 void main() => runApp(new MyApp());
 
@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
       title: 'Login PHP My Admin',
       home: new MyHomePage(),
       routes: <String,WidgetBuilder>{
-        '/AdminPage': (BuildContext context)=> new AdminPage(username: username,),
-        '/MemberPage': (BuildContext context)=> new MemberPage(username: username,),
+        '/AdminPage': (BuildContext context)=> new AdminPage(),
+        '/MemberPage': (BuildContext context)=> new TeacherPage(),
         '/MyHomePage': (BuildContext context)=> new MyHomePage(),
       },
     );
@@ -37,8 +37,17 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController user=new TextEditingController();
   TextEditingController pass=new TextEditingController();
 
+  
   String msg='';
+  Future<List> _register() async {
+    final response = await http.post("http://10.0.2.2/my_sql/register.php", body: {
+      "username": user.text,
+      "password": pass.text,
 
+    });
+    print(response.body);
+
+  }
   Future<List> _login() async {
 
     final response = await http.post("http://10.0.2.2/my_sql/login.php", body: {
@@ -47,7 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     print(response.body);
     var datauser = json.decode(response.body);
-    //print("heuheu:"+datauser);
+    print(datauser);
+
     if(datauser.length==0){
       print('hello');
       setState(() {

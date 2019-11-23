@@ -2,41 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-class AdminPage extends StatefulWidget{
+class TeacherPage extends StatefulWidget{
   @override
-  _AdminPage createState()=> _AdminPage();
-
-
-
+  _TeacherPage createState()=> _TeacherPage();
 
 }
-class _AdminPage extends State<AdminPage> {
+class _TeacherPage extends State<TeacherPage> {
 
   String msg = '';
+  TextEditingController id = new TextEditingController();
   TextEditingController u = new TextEditingController();
   TextEditingController p = new TextEditingController();
   TextEditingController level = new TextEditingController();
 
-  Future<List> _register() async {
-    final response = await http.post(
-        "http://10.0.2.2/my_sql/register.php", body: {
-      "username": u.text,
-      "password": p.text,
-      "level": level.text,
 
-    });
-    print(response.body);
-    String responsestr = response.body;
-    if(responsestr=='NALABAY'){
-      setState(() {
-        msg="SUCCESSFULLY REGISTERED!";
-      });
-    }
-  }
-  Future <List> _delete() async{
+  Future<List> _update() async{
     final response = await http.post(
-        "http://10.0.2.2/my_sql/delete.php", body: {
-        "id":u.text,
+        "http://10.0.2.2/my_sql/edit.php", body: {
+         "id":id.text,
+        "username": u.text,
+        "password": p.text,
 
     });
     print(response.body);
@@ -47,13 +32,19 @@ class _AdminPage extends State<AdminPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(title: Text("ADMIN")),
+      appBar: AppBar(title: Text("TEACHER")),
       body: Container(
         child: Center(
           child: Column(
             children: <Widget>[
               Text(msg,style: TextStyle(fontSize: 20.0,color: Colors.red),),
-
+              Text("TEACHER ID", style: TextStyle(fontSize: 18.0),),
+              TextField(
+                controller: id,
+                decoration: InputDecoration(
+                    hintText: 'Password'
+                ),
+              ),
               Text("Username", style: TextStyle(fontSize: 18.0),),
               TextField(
                 controller: u,
@@ -69,23 +60,11 @@ class _AdminPage extends State<AdminPage> {
                     hintText: 'Password'
                 ),
               ),
-              Text("User Type", style: TextStyle(fontSize: 18.0),),
-              TextField(
-                controller: level,
-                decoration: InputDecoration(
-                    hintText: 'user level'
-                ),
-              ),
+
               RaisedButton(
-                child: Text("Register"),
+                child: Text("UPDATE "),
                 onPressed: () {
-                  _register();
-                },
-              ),
-              RaisedButton(
-                child: Text("DELETE"),
-                onPressed: () {
-                  _delete();
+                  _update();
                 },
               ),
               RaisedButton(
@@ -101,7 +80,7 @@ class _AdminPage extends State<AdminPage> {
     );
   }
 }
-  /*Widget build(BuildContext context) {
+/*Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Welcome Admin"),),
       body: Column(
