@@ -4,7 +4,7 @@ if($connect){
 
 }
 else{
-	echo "failed";
+	echo "wa ni connect";
 	exit();
 }
 ?>
